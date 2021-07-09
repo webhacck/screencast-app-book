@@ -33,14 +33,16 @@
         navigator.mediaDevices.getUserMedia({video: false, audio: true})
       ];
       
+      // 映像と音声のストリームデータをそれぞれ取得する
       Promise.all(streamData)
       .then(([video, audio]) => {
-        const videoTrack = video.getVideoTracks()[0];
-        const audioTrack = audio.getAudioTracks()[0];
+        const videoTrack = video.getVideoTracks()[0]; //映像のメディアトラックを抽出
+        const audioTrack = audio.getAudioTracks()[0]; //音声のメディアトラックを抽出
         
+        // 映像と音声のストリームデータを結合してrecordSetting関数に渡す
         recordSetting(new MediaStream([videoTrack, audioTrack]));
       })
-      .catch(error => window.location.reload())
+      .catch(error => window.location.reload()) // 画面共有ウィンドウにてキャンセルをクリックした場合の処理
       
       
       startBtn.disabled = true;
