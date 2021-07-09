@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>スクリーンキャストデモ</title>
+  <style>
+    #videoElement {
+      display: none;
+      width: 600px;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>スクリーンキャストデモ</h1>
+  <button id="startBtn">録画開始</button>
+  <button id="stopBtn" disabled>停止</button>
+  <div>
+    <video controls="true" id="videoElement"></video>
+  </div>
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    let rec;
+
+    startBtn.addEventListener('click', startEvent);
+    stopBtn.addEventListener('click', stopEvent);
+    
+    
+    function startEvent() {
+      const streamData = [
+        navigator.mediaDevices.getDisplayMedia({video: true }),
+        navigator.mediaDevices.getUserMedia({video: false, audio: true})
+      ];
+      
+      Promise.all(streamData)
+      .then(([video, audio]) => {
+        const videoTrack = video.getVideoTracks()[0];
+        const audioTrack = audio.getAudioTracks()[0];
+        
+        recordSetting(new MediaStream([videoTrack, audioTrack]));
+      })
+      .catch(error => window.location.reload())
+      
+      
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+    }
+    
+    function recordSetting(stream) {
+      rec = new MediaRecorder(stream, {
+        mimeType: 'video/webm; codecs=vp8,opus'
+      });
+      
+      rec.ondataavailable = event => {
+        const videoElement = document.getElementById('videoElement');
+        const blobUrl = window.URL.createObjectURL(event.data);
+        
+        videoElement.src = blobUrl;
+        videoElement.style.display = 'block';
+      }
+      rec.start();
+    }
+
+    function stopEvent() {
+      rec.stop();
+      rec.stream.getTracks().forEach(streamData => streamData.stop());
+      
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+    };
+
+  
+  </script>
+</body>
+</html>
