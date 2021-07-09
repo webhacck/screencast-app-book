@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>スクリーンキャストデモ</title>
+  <style>
+    #videoElement {
+      width: 600px;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>スクリーンキャストデモ</h1>
+  <button id="startBtn">録画開始</button>
+  <button id="stopBtn">停止</button>
+  <div>
+    <video controls="true" id="videoElement"></video>
+  </div>
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+
+    startBtn.addEventListener('click', startEvent);
+    stopBtn.addEventListener('click', stopEvent);
+    
+    
+    
+    // 「録画開始」ボタンがクリックされたらストリームデータを取得する
+    function startEvent() {
+      navigator.mediaDevices.getDisplayMedia({video: true})
+      .then(videoStream => console.log(videoStream))
+      .catch(error => window.location.reload())
+    }
+
+    // ストリームデータを利用して画面録画を処理する
+    function recordSetting() { }  
+
+    // 「停止」ボタンがクリックされたら録画処理を停止する
+    function stopEvent() { }
+
+  </script>
+</body>
+</html>
