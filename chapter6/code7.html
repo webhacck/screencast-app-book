@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <title>スクリーンキャストデモ</title>
+  <style>
+    #videoElement {
+      display: none; /* ビデオ要素を非表示にする */
+      width: 600px;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>スクリーンキャストデモ</h1>
+  <button id="startBtn">録画開始</button>
+  <button id="stopBtn" disabled>停止</button>
+  <div>
+    <video controls="true" id="videoElement"></video>
+  </div>
+  <script>
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    let rec;
+
+    startBtn.addEventListener('click', startEvent);
+    stopBtn.addEventListener('click', stopEvent);
+    
+
+    function startEvent() {
+      navigator.mediaDevices.getDisplayMedia({video: true})
+      .then(videoStream => recordSetting(videoStream))
+      .catch(error => window.location.reload())
+      
+      startBtn.disabled = true; // 「録画開始」ボタンを無効化
+      stopBtn.disabled = false; // 「停止」ボタンを有効化
+    }
+    
+    function recordSetting(stream) {
+      rec = new MediaRecorder(stream, {
+        mimeType: 'video/webm; codecs=vp8,opus'
+      });
+      
+      rec.ondataavailable = event => {
+        const videoElement = document.getElementById('videoElement');
+        const blobUrl = window.URL.createObjectURL(event.data);
+        
+        videoElement.src = blobUrl;
+        videoElement.style.display = 'block'; // ビデオ要素を表示させる
+      }
+      rec.start();
+    }
+
+    function stopEvent() {
+      rec.stop();
+      rec.stream.getTracks().forEach(streamData => streamData.stop());
+      
+      startBtn.disabled = false; // 「録画開始」ボタンを有効化
+      stopBtn.disabled = true; // 「停止」ボタンを無効化
+    };
+
+  
+  </script>
+</body>
+</html>
