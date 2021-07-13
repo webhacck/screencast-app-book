@@ -35,7 +35,7 @@
     
     function recordSetting(stream) {
       rec = new MediaRecorder(stream, {
-        mimeType: 'video/webm; codecs=vp8,opus'
+        mimeType: 'video/webm; codecs=vp8,opus' //ご自身の環境に合わせたコーデックを指定してください
       });
       
       rec.start();
