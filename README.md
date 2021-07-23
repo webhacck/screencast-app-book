@@ -49,4 +49,16 @@ micSwitch.disabled = true; // 無効化
 micSwitch.disabled = false; // 有効化
 ```
 
+【59ページ】
+CSSのセレクター名が「#downloadBt」と記載していますが正しくは「#downloadBtn」になります。
+
+```css
+#downloadBtn {
+    padding: 5px;
+    color: #000;
+    border: 4px solid #888;
+    border-radius: 15px;
+    text-decoration: none;
+}
+```
 
