@@ -26,3 +26,27 @@
 本書に掲載しているサンプルコードやダウンロードファイルなどをすべてまとめています。
 
 ソースコードは独自プロジェクト、勉強会などなど…自由にご利用頂いて問題ありません。
+
+## 最新情報・誤植
+
+【55ページ】
+ソースコードの条件分岐にて、else内のthen()末尾に;が付与されていますが本来は不要です。
+
+```js
+} else {
+navigator.mediaDevices.getDisplayMedia({ video: true })
+.then(videoStream => recordSetting(videoStream)); //←ここの;は不要（削除してください）
+.catch(error => window.location.reload())
+}
+```
+
+【56ページ】
+チェックボックスの無効化・有効化における値の指定がどちらもtrueになっていました。正しくは以下のとおりです。
+
+```js
+micSwitch.disabled = true; // 無効化
+
+micSwitch.disabled = false; // 有効化
+```
+
+
